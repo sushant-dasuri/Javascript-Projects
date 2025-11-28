@@ -60,16 +60,15 @@
             let passwordFields = document.querySelectorAll('input[type="password"]');
             let togglePasswords = document.querySelector('#show-passwords');
 
-            togglePasswords.addEventListener('change', function() {
-                passwordFields.forEach(function(field) {
-                    if (togglePasswords.checked) {
+            togglePasswords.addEventListener('click', function() {
+                for (let field of passwordFields) {
+                    if(field.type === 'password') {
                         field.type = 'text';
                     }
-
                     else {
                         field.type = 'password';
                     }
-                })
+                }
             })
 		</script>
 	</body>
