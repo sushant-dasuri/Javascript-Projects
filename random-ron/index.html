@@ -11,13 +11,23 @@
 				max-width: 40em;
 				width: 88%;
 			}
+
+            img {
+	height: auto;
+	max-width: 100%;
+	width: 300px;
+}
 		</style>
 	</head>
 	<body>
 
 		<h1>Random Ron</h1>
 
-		<blockquote></blockquote>
+        <img alt="Ron Swanson standing in front of a buffet stating, 'I've said too much.'" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmRycTQ3Y3o5dmVmbTlnczk4azR2Z2ZnYWxzbnQ5OGNxcmVmc2pnYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OfkGZ5H2H3f8Y/giphy.gif">
+
+		<blockquote id="quote" aria-live="polite">
+	<em>Getting a fresh quote...</em>
+</blockquote>
 
 		<p>
 			<button id="get-quote">More Ron</button>
@@ -26,7 +36,7 @@
 
 		<script>
             let fetchQuoteBtn = document.querySelector('#get-quote');
-            let quoteBlock = document.querySelector('blockquote');
+            let quoteBlock = document.querySelector('#quote');
             function fetchRandomRonQuote () { fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes').then(
                 function(response) {
                     if(response.ok) {
