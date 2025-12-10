@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Random Ron</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>Random Ron</h1>
+
+		<blockquote></blockquote>
+
+		<p>
+			<button id="get-quote">More Ron</button>
+		</p>
+
+
+		<script>
+            let fetchQuoteBtn = document.querySelector('#get-quote');
+            let quoteBlock = document.querySelector('blockquote');
+            function fetchRandomRonQuote () { fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes').then(
+                function(response) {
+                    if(response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok.');
+                    }
+                }
+            ).then(function(data) {
+                console.log(data);
+                quoteBlock.innerHTML = data[0];
+            }).catch(function(error){
+                console.log('There has been a problem with your fetch operation:', error);
+            })
+        }
+
+        fetchRandomRonQuote();
+
+            fetchQuoteBtn.addEventListener('click', function(){
+                fetchRandomRonQuote();
+            })
+
+		</script>
+	</body>
+</html>
