@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Random Ron Duplicate</title>
+		<title>Random Ron - No Duplicates</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<style type="text/css">
@@ -12,65 +12,70 @@
 				width: 88%;
 			}
 
-            img {
-	height: auto;
-	max-width: 100%;
-	width: 300px;
-}
+			img {
+				height: auto;
+				max-width: 100%;
+				width: 100%;
+			}
 		</style>
 	</head>
 	<body>
 
-		<h1>Random Ron</h1>
+		<h1>Random Ron - No Duplicates</h1>
 
-        <img alt="Ron Swanson standing in front of a buffet stating, 'I've said too much.'" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmRycTQ3Y3o5dmVmbTlnczk4azR2Z2ZnYWxzbnQ5OGNxcmVmc2pnYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OfkGZ5H2H3f8Y/giphy.gif">
+		<img alt="Ron Swanson standing in front of a buffet stating, 'I've said too much.'" src="https://giphygifs.s3.amazonaws.com/media/iofbYa67AbBg4/giphy.gif">
 
 		<blockquote id="quote" aria-live="polite">
-	<em>Getting a fresh quote...</em>
-</blockquote>
+			<em>Getting a fresh quote...</em>
+		</blockquote>
 
 		<p>
 			<button id="get-quote">More Ron</button>
 		</p>
 
-
 		<script>
-            let fetchQuoteBtn = document.querySelector('#get-quote');
-            let quoteBlock = document.querySelector('#quote');
-			let quoteArray = [];
-            function fetchRandomRonQuote () { fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes').then(
-                function(response) {
-                    if(response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Network response was not ok.');
-                    }
-                }
-            ).then(function(data) {
-				//Check array length to keep it at 50 max items
-				quoteArray.length >= 50 ? quoteArray.push(data[0]) && quoteArray.shift() : quoteArray.push(data[0]);
-				console.log(quoteArray);
+			// Get the blockquote and button elements
+			let quote = document.querySelector('#quote');
+			let btn = document.querySelector('#get-quote');
 
-				//check for duplicate quote in array
-				if(!(quoteArray.slice(0, -1).includes(data[0])) ) {
-					quoteBlock.innerHTML = data[0];
-				}
+			// Hold previous used quotes
+			let quotes = [];
 
-				else {
-					alert('Duplicate quote detected. Fetch a new quote.');
-				}
+			// Get a fresh quote and render it into the DOM
+			function getQuote () {
+				fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes').then(function (response) {
+					if (response.ok) {
+						return response.json();
+					}
+					throw response.status;
+				}).then(function (data) {
 
-            }).catch(function(error){
-                console.log('There has been a problem with your fetch operation:', error);
-            })
-        }
+					// If there are at least 50 previously used quotes, remove the first one
+					if (quotes.length > 49) {
+						quotes.shift();
+					}
 
-        fetchRandomRonQuote();
+					// If this quote was already used, recursively fetch a new one
+					// Then, end the current callback function
+					if (quotes.includes(data[0])) {
+						getQuote();
+						return;
+					}
 
-            fetchQuoteBtn.addEventListener('click', function(){
-                fetchRandomRonQuote();
-            })
+					// Otherwise, update the UI and add the quote to the list
+					quote.textContent = data[0];
+					quotes.push(data[0]);
 
+				}).catch(function (error) {
+					quote.textContent = '[Something went wrong, sorry!] I have a joke for you... The government in this town is excellent, and uses your tax dollars efficiently.';
+				});
+			}
+
+			// Get a quote on page load
+			getQuote();
+
+			// Get a quote when the #get-quote button is clicked
+			btn.addEventListener('click', getQuote);
 		</script>
 	</body>
 </html>
