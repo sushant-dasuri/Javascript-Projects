@@ -37,6 +37,7 @@
 		<script>
             let fetchQuoteBtn = document.querySelector('#get-quote');
             let quoteBlock = document.querySelector('#quote');
+			let quoteArray = [];
             function fetchRandomRonQuote () { fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes').then(
                 function(response) {
                     if(response.ok) {
@@ -46,8 +47,16 @@
                     }
                 }
             ).then(function(data) {
-                console.log(data);
-                quoteBlock.innerHTML = data[0];
+				quoteArray.length >= 50 ? quoteArray.push(data[0]) && quoteArray.shift() : quoteArray.push(data[0]);
+				console.log(quoteArray);
+				if(!(quoteArray.slice(0, -1).includes(data[0])) ) {
+					quoteBlock.innerHTML = data[0];
+				}
+
+				else {
+					alert('Duplicate quote detected. Fetch a new quote.');
+				}
+
             }).catch(function(error){
                 console.log('There has been a problem with your fetch operation:', error);
             })
