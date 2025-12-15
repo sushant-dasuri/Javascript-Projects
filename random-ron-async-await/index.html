@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Random Ron</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+
+            img {
+	height: auto;
+	max-width: 100%;
+	width: 300px;
+}
+		</style>
+	</head>
+	<body>
+
+		<h1>Random Ron</h1>
+
+        <img alt="Ron Swanson standing in front of a buffet stating, 'I've said too much.'" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmRycTQ3Y3o5dmVmbTlnczk4azR2Z2ZnYWxzbnQ5OGNxcmVmc2pnYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OfkGZ5H2H3f8Y/giphy.gif">
+
+		<blockquote id="quote" aria-live="polite">
+	<em>Getting a fresh quote...</em>
+</blockquote>
+
+		<p>
+			<button id="get-quote">More Ron</button>
+		</p>
+
+
+		<script>
+            let fetchQuoteBtn = document.querySelector('#get-quote');
+            let quoteBlock = document.querySelector('#quote');
+			let quoteArray = [];
+            async function fetchRandomRonQuote () { 
+				await fetch('https://ron-swanson-quotes.herokuapp.com/v2/quotes').then(
+                function(response) {
+                    if(response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok.');
+                    }
+                }
+            ).then(function(data) {
+				quoteArray.length >= 50 ? quoteArray.push(data[0]) && quoteArray.shift() : quoteArray.push(data[0]);
+				console.log(quoteArray);
+				if(!(quoteArray.slice(0, -1).includes(data[0])) ) {
+					quoteBlock.innerHTML = data[0];
+				}
+
+				else {
+					alert('Duplicate quote detected. Fetch a new quote.');
+				}
+
+            }).catch(function(error){
+                console.log('There has been a problem with your fetch operation:', error);
+            })
+
+			console.log("Fetch complete");
+        }
+
+        fetchRandomRonQuote();
+
+            fetchQuoteBtn.addEventListener('click', function(){
+                fetchRandomRonQuote();
+            })
+
+		</script>
+	</body>
+</html>
