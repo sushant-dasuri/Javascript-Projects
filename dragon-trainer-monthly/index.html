@@ -21,6 +21,44 @@
 
 		<script>
 			// Your code goes here...
+            let appDiv = document.querySelector('#app');
+
+           fetch('https://leanwebclub.com/course-apis/dragons.json').then(function(response){
+            if(response.ok){
+                return response.json();
+            } else {
+                throw response.status;
+            }
+           }).then(function(data){
+
+                renderArticles(data.articles);
+
+           }).catch(function(error) {
+            console.log(error);
+           })
+
+           function renderArticles(articles) {
+
+            if(!articles || articles.length === 0) {
+                renderFail();
+                return;
+            }
+
+			appDiv.innerHTML = articles.map(function(){
+				return `
+				<article>
+					<h2><a href="${article.url}">${article.title}</a></h2>
+
+					<p><em> By ${article.author}</em></p>
+					<p>${article.article}</p>
+					</article>`;
+			}).join();
+            
+           }
+
+		   function renderFail() {
+			appDiv.innerHTML = '<p>Failed to load articles. Please try again later.</p>';
+		   }
 		</script>
 	</body>
 </html>
