@@ -45,7 +45,7 @@
                 return;
             }
 
-			appDiv.innerHTML = articles.map(function(){
+			appDiv.innerHTML = articles.map(function(article){
 				return `
 				<article>
 					<h2><a href="${article.url}">${article.title}</a></h2>
