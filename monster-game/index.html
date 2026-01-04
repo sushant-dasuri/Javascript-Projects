@@ -134,14 +134,36 @@
 
 			// Inject the monsters into the DOM
 			app.innerHTML =
-				`<div class="row">
-					${monsters.map(function (monster) {
+				`<p>Click a door to reveal a monster. Try not to find the sock.</p>
+                <div class="row">
+					${monsters.map(function (monster, index) {
 						return `
 							<div class="grid">
-								<img alt="${monster.alt}" src="${monster.name}.svg">
+								<button data-monster="${index}"><img alt="Door ${index + 1}" src="img/door.svg"></button>
 							</div>`;
 					}).join('')}
 				</div>`;
+
+                //Listen for click events
+                document.addEventListener("click", clickHandler)
+
+
+                // Handle click events
+                function clickHandler(event) {
+                    //Get the monster
+                    let btn = event.target.closest("button[data-monster]");
+                    if (!btn) return;
+                    let monster = monsters[btn.getAttribute("data-monster")];
+                    if (!monster) return;
+
+                    //Create a monster image
+                    let img =document.createElement("img");
+                    img.src = `img/${monster.name}.svg`;
+                    img.alt = monster.alt;
+
+                    //Replace the button with the monster image
+                    btn.replaceWith(img);
+                }
 		</script>
 	</body>
 </html>
