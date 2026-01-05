@@ -147,6 +147,7 @@
                 //Listen for click events
                 document.addEventListener("click", clickHandler)
 
+                let found = 0;
 
                 // Handle click events
                 function clickHandler(event) {
@@ -154,6 +155,16 @@
                     let btn = event.target.closest("button[data-monster]");
                     if (!btn) return;
                     let monster = monsters[btn.getAttribute("data-monster")];
+                    if(monster.name === 'sock') {
+                        alert("You found the sock! Game over.");
+                        location.reload();
+                    }
+                    found++;
+                    if(found === monsters.length - 1) {
+                        alert("You found all the monsters! You win!");
+                        location.reload();
+                    }
+                   
                     if (!monster) return;
 
                     //Create a monster image
