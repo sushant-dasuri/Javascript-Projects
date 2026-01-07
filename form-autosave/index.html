@@ -52,46 +52,69 @@
 	</form>
 
 	<script>
-		const form = document.querySelector('#save-me');
-		const btn = document.querySelector('button[type="submit"]');
+		//Get the form element
+		let form = document.querySelector("#save-me");
 
-		//Register input event listeners to save data to localStorage
-		form.addEventListener('input', (e) => {
-			let formData = new FormData(form);
-			let formObj = {};
+		//localStorage prefix
+		let prefix = "autosave_";
 
-			//Convert FormData to a regular object
-			formData.forEach((value, key) => {
-				formObj[key] = value;
-			});
+		/**
+		 * Handle Input Events
+		 * @param {Event} event The event object
+		 */
 
-			//Save the object to localStorage
-			localStorage.setItem('savedFormData', JSON.stringify(formObj));
-		});
+		 function inputHandler(event) {
 
-		//On page load, check for saved data and populate the form
-		window.addEventListener('load', () => {
-			let savedData = localStorage.getItem('savedFormData');
-			if(savedData) {
-				let formObj = JSON.parse(savedData);
-				for(let key in formObj) {
-					let input = document.querySelector(`[name="${key}"]`);
-					if(input) {
-						input.value = formObj[key];
-					}
-				}
+			//save the field to a variable
+			let field = event.target;
+
+			//only save field if it has id attribute
+			if(!field.id) return;
+
+			//save the field to localStorage
+			localStorage.setItem(prefix + field.id, field.value);
+		 }
+
+		 /**
+		  * Clear all of the saved fields from storage
+		  */
+		 function clearStorage() {
+
+			//Get all of the fields in the form
+			let fields = form.elements;
+
+			//Loop through each one and remove from storage
+			for (let field of fields) {
+				localStorage.removeItem(prefix + field.id);
 			}
-		})
+		 }
 
-		//On form submission, clear the saved form data
-		btn.addEventListener('click', (e) => {
-			e.preventDefault(); //Prevent actual form submission for demo purposes
-			alert('Form submitted! Saved data will be cleared.');
-			localStorage.removeItem('savedFormData');
-			
-			//Clear the form
-			form.reset();
-		})
+
+		 /**
+		  * Load saved data from localStorage
+		  */
+		 function loadSaved() {
+
+			//Get all the fields in the form
+			let fields =form.elements;
+
+			//Loop through each one and load saved data from storage
+			for(let field of fields) {
+
+				let saved = localStorage.getItem(prefix + field.id);
+				if(!saved) continue;
+				field.value = saved;
+			}
+		 }
+
+		 //Load saved data from localStorage
+		 loadSaved();
+
+
+		 //Listen for DOM events
+		 form.addEventListener("input", inputHandler);
+		 form .addEventListener("submit", clearStorage);
+
 	</script>
 </body>
 </html>
