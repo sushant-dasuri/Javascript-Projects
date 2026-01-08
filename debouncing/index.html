@@ -26,6 +26,9 @@
 		// Track the number of clicks
 		let count = 0;
 
+        //Hold debouncer
+        let debounce;
+
 		/**
 		 * Count the clicks
 		 */
@@ -34,8 +37,13 @@
 			// Increase the count by 1
 			count++;
 
+            //Clear any existing debounce function
+            clearTimeout(debounce);
+
 			// Update the UI
-			num.textContent = count;
+            debounce = setTimeout(() => {
+                	num.textContent = count;
+            }, 300)
 
 		}
 
