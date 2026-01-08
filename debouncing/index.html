@@ -38,12 +38,12 @@
 			count++;
 
             //Clear any existing debounce function
-            clearTimeout(debounce);
+            cancelAnimationFrame(debounce);
 
 			// Update the UI
-            debounce = setTimeout(() => {
+            debounce = requestAnimationFrame(() => {
                 	num.textContent = count;
-            }, 300)
+            })
 
 		}
 
