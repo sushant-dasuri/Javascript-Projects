@@ -60,6 +60,9 @@
 		//localStorage prefix
 		let savedFormData = "autosave_fields";
 
+		//Hold debouncer and current notification
+		let debounce, currentNotification;
+
 		/**
  * Serialize all form data into an object
  * @param  {FormData} data The FormData object to serialize
@@ -81,17 +84,66 @@
 		}
 
 		/**
+		 * show a "fields saved" status message
+		 */
+
+		 function showStatus () {
+			//Create the notification
+			let notification = document.createElement("div");
+			notification.setAttribute("aria-live", "polite");
+
+			//Inject notification into the DOM
+			form.append(notification);
+
+			//Add text after it's in the UI 
+			//Remove current notification
+
+			setTimeout(() => {
+
+				//show status message
+				notification.textContent = "Your info has been automatically saved, You can complete and submit the form later.";
+
+				//If there is a current notification, remove it
+				if(currentNotification) {
+					currentNotification.remove();
+
+				}
+
+				//Store the new notification
+				currentNotification = notification;
+				
+			}, 100);
+
+			//Clear it after 6 seconds
+			setTimeout(() => {
+				notification.remove();
+			}, 6000)
+
+		 }
+
+		/**
 		 * Handle Input Events
 		 * @param {Event} event The event object
 		 */
 
 		function inputHandler(event) {
 
-			//Serailize the form data
+			//Clear any existing debounced functions
+			clearTimeout(debounce);
+
+
+			//Debounce saving the fields
+			debounce = setTimeout(() => {
+				//Serailize the form data
 			let data = serialize(new FormData(form));
 
 			//Stringify the object and save it to localStorage
 			localStorage.setItem(savedFormData, JSON.stringify(data));
+
+			//Show status message
+			showStatus();
+
+			}, 1000)
 		}
 
 		/**
