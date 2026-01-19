@@ -38,7 +38,7 @@
 
                  Constructor.prototype.addBronze = function(n) {
                     this.bronze += n;
-                    return this.bronze;
+                    return this;
                  }
 
 
@@ -49,7 +49,7 @@
 
                  Constructor.prototype.addSilver = function(n) {
                     this.silver += n;
-                    return this.silver;
+                    return this;
                  }
 
 
@@ -60,7 +60,7 @@
 
                  Constructor.prototype.addGold = function(n) {
                     this.gold += n;
-                    return this.gold;
+                    return this;
                  }
 
 
@@ -73,17 +73,26 @@
                     return `You have ${this.gold} gold, ${this.silver} silver, and ${this.bronze} bronze.`;
                  }
 
+                 Constructor.getRandomLoot = function() {
+                   let amount = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50];
+
+                   let randomGold = amount[Math.floor(Math.random() * amount.length)];
+                   let randomSilver = amount[Math.floor(Math.random() * amount.length)];
+                   let randomBronze = amount[Math.floor(Math.random() * amount.length)];
+
+                   return `You have found ${randomGold} gold, ${randomSilver} silver and ${randomBronze} bronze!`;
+
+
+                 }
+
                 return Constructor;
 
            })();
 
              //Create instances
-                 let captain = new TreasureChest();
-                 let firstMate = new TreasureChest();
+                let captain = new TreasureChest();
+                captain.addBronze(42).addSilver(7).addGold(12).getLoot();
 
-                 //Add Loot
-                 captain.addGold(100);
-                 captain.addSilver(250);
 
                  //Get Loot
                  let bronze = captain.bronze;
@@ -91,6 +100,11 @@
                  let gold = captain.gold;
                  let loot = captain.getLoot();
 
+
+                 //Get Random Loot
+                 let randomLoot = TreasureChest.getRandomLoot();
+
+                    console.log(randomLoot);
                     console.log(`Bronze: ${bronze}, Silver: ${silver}, Gold: ${gold}`);
                     console.log(`Captain's Loot: ${loot}`);
 
