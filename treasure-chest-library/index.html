@@ -21,7 +21,79 @@
 
 
 		<script>
-			// Code goes here...
+           let TreasureChest = (function() {
+
+            /* Create a Constructor Object */
+
+                function Constructor() {
+                    this.gold = 0;
+                    this.silver = 0;
+                    this.bronze = 0;
+                }
+
+                /**
+                 * Add bronze to the treasure chest
+                 * @param {Number} n -> The amount of bronze to add
+                 */
+
+                 Constructor.prototype.addBronze = function(n) {
+                    this.bronze += n;
+                    return this.bronze;
+                 }
+
+
+                  /**
+                 * Add silver to the treasure chest
+                 * @param {Number} n -> The amount of silver to add
+                 */
+
+                 Constructor.prototype.addSilver = function(n) {
+                    this.silver += n;
+                    return this.silver;
+                 }
+
+
+                  /**
+                 * Add gold to the treasure chest
+                 * @param {Number} n -> The amount of gold to add
+                 */
+
+                 Constructor.prototype.addGold = function(n) {
+                    this.gold += n;
+                    return this.gold;
+                 }
+
+
+                  /**
+                 * Get the total amount of loot as a string
+                 * @return {String} -> The total amount of loot
+                 */
+
+                 Constructor.prototype.getLoot = function() {
+                    return `You have ${this.gold} gold, ${this.silver} silver, and ${this.bronze} bronze.`;
+                 }
+
+                return Constructor;
+
+           })();
+
+             //Create instances
+                 let captain = new TreasureChest();
+                 let firstMate = new TreasureChest();
+
+                 //Add Loot
+                 captain.addGold(100);
+                 captain.addSilver(250);
+
+                 //Get Loot
+                 let bronze = captain.bronze;
+                 let silver = captain.silver;
+                 let gold = captain.gold;
+                 let loot = captain.getLoot();
+
+                    console.log(`Bronze: ${bronze}, Silver: ${silver}, Gold: ${gold}`);
+                    console.log(`Captain's Loot: ${loot}`);
+
 		</script>
 	</body>
 </html>
