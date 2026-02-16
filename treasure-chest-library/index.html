@@ -25,10 +25,39 @@
 
             /* Create a Constructor Object */
 
-                function Constructor() {
-                    this.gold = 0;
-                    this.silver = 0;
-                    this.bronze = 0;
+                function Constructor(options = {}) {
+                    // Merge options into defaults
+    let {bronze, silver, gold, loot} = Object.assign({
+        bronze: 0,
+        silver: 0,
+        gold: 0,
+        loot: `You have {{gold}} gold, {{silver}} silver, and {{bronze}} bronze.`
+    }, options);
+
+    // Set instance properties
+    this.bronze = 0;
+    this.silver = 0;
+    this.gold = 0;
+    this._loot = loot;
+
+    // Set instance properties
+Object.defineProperties(this, {
+    bronze: {
+        value: bronze,
+        writable: true
+    },
+    silver: {
+        value: silver,
+        writable: true
+    },
+    gold: {
+        value: gold,
+        writable: true
+    },
+    _loot: {
+        value: loot
+    }
+});
                 }
 
                 /**
@@ -96,7 +125,7 @@
                  */
 
                  Constructor.prototype.getLoot = function() {
-                    return `You have ${this.gold} gold, ${this.silver} silver, and ${this.bronze} bronze.`;
+                    return this._loot.replace('{{gold}}', this.gold).replace('{{silver}}', this.silver).replace('{{bronze}}', this.bronze);
                  }
 
                  /*
