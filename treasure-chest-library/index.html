@@ -25,6 +25,12 @@
    <script>
       class TreasureChest {
 
+
+         #gold;
+         #silver;
+         #bronze;
+         #loot;
+
          /* Create a Constructor Object */
 
           constructor(options = {}) {
@@ -37,23 +43,10 @@
             }, options);
 
             // Set instance properties
-            Object.defineProperties(this, {
-               bronze: {
-                  value: bronze,
-                  writable: true
-               },
-               silver: {
-                  value: silver,
-                  writable: true
-               },
-               gold: {
-                  value: gold,
-                  writable: true
-               },
-               _loot: {
-                  value: loot
-               }
-            });
+            this.#gold = gold;
+            this.#silver = silver;
+            this.#bronze = bronze;
+            this.#loot = loot;
          }
 
          /**
@@ -62,7 +55,7 @@
           * @param {Array} array -> The array to shuffle
           * @return {Array} -> The shuffled array
           */
-         static shuffle(array) {
+         static #shuffle(array) {
             let currentIndex = array.length;
             let temporaryValue, randomIndex;
 
@@ -88,7 +81,7 @@
           */
 
          addBronze = function (n) {
-            this.bronze += n;
+            this.#bronze += n;
             return this;
          }
 
@@ -99,7 +92,7 @@
         */
 
          addSilver = function (n) {
-            this.silver += n;
+            this.#silver += n;
             return this;
          }
 
@@ -110,7 +103,7 @@
         */
 
         addGold = function (n) {
-            this.gold += n;
+            this.#gold += n;
             return this;
          }
 
@@ -121,7 +114,7 @@
         */
 
           getLoot = function () {
-            return this._loot.replace('{{gold}}', this.gold).replace('{{silver}}', this.silver).replace('{{bronze}}', this.bronze);
+            return this._loot.replace('{{gold}}', this.#gold).replace('{{silver}}', this.#silver).replace('{{bronze}}', this.#bronze);
          }
 
          /*
@@ -136,8 +129,8 @@
             let type = ['gold', 'silver', 'bronze'];
 
             // Randomize the amount and the type
-            this.shuffle(amount);
-            this.shuffle(type);
+            this.#shuffle(amount);
+            this.#shuffle(type);
 
             return {
                amount: amount[0],
@@ -148,23 +141,16 @@
       };
 
       //Create instances
-      let captain = new TreasureChest();
-      captain.addBronze(42).addSilver(7).addGold(12).getLoot();
+     // Create an instance
+let captain = new TreasureChest();
 
+// Try to break the library
+captain.gold = 123;
+captain.#gold = 456;
 
-      //Get Loot
-      let bronze = captain.bronze;
-      let silver = captain.silver;
-      let gold = captain.gold;
-      let loot = captain.getLoot();
-
-
-      //Get Random Loot
-      let randomLoot = TreasureChest.getRandomLoot();
-
-      console.log(randomLoot);
-      console.log(`Bronze: ${bronze}, Silver: ${silver}, Gold: ${gold}`);
-      console.log(`Captain's Loot: ${loot}`);
+// Try to access private methods
+captain.shuffle([1, 2, 3]);
+captain.#shuffle([4, 5, 6]);
 
    </script>
 </body>
