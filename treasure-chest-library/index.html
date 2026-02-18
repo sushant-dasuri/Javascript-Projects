@@ -75,6 +75,26 @@
             return array;
          }
 
+
+          /**
+          * Emit a Custom Event
+          * @param {String} type The event type
+          * @param {*} detail Any details to pass along with the event
+          */
+
+          #emit(type, detail) {
+            //Create a new custom event
+            let event = new CustomEvent(type, {
+               bubbles: true,
+               cancelable: true,
+               detail: detail
+            });
+
+            //Dispatch the event
+            return document.dispatchEvent(event);
+
+          }
+
          /**
           * Add bronze to the treasure chest
           * @param {Number} n -> The amount of bronze to add
@@ -82,6 +102,7 @@
 
          addBronze = function (n) {
             this.#bronze += n;
+            this.#emit('treasure:bronze', this)
             return this;
          }
 
@@ -93,6 +114,7 @@
 
          addSilver = function (n) {
             this.#silver += n;
+            this.#emit('treasure:silver', this);
             return this;
          }
 
@@ -104,6 +126,7 @@
 
         addGold = function (n) {
             this.#gold += n;
+            this.#emit('treasure:gold', this);
             return this;
          }
 
@@ -113,9 +136,35 @@
         * @return {String} -> The total amount of loot
         */
 
-          getLoot = function () {
-            return this._loot.replace('{{gold}}', this.#gold).replace('{{silver}}', this.#silver).replace('{{bronze}}', this.#bronze);
+          getLoot () {
+            return this.#loot.replace('{{gold}}', this.#gold).replace('{{silver}}', this.#silver).replace('{{bronze}}', this.#bronze);
          }
+
+
+         /**
+				 * Get the amount of bronze
+				 * @return {Number} The amount
+				 */
+				getBronze () {
+					return this.#bronze;
+				}
+
+				/**
+				 * Get the amount of silver
+				 * @return {Number} The amount
+				 */
+				getSilver () {
+					return this.#silver;
+				}
+
+				/**
+				 * Get the amount of gold
+				 * @return {Number} The amount
+				 */
+				getGold () {
+					return this.#gold;
+				}
+
 
          /*
          * Get a random amount of loot
@@ -138,19 +187,39 @@
             }
 
          }
+          
       };
 
-      //Create instances
-     // Create an instance
-let captain = new TreasureChest();
+     //Get any saved loot from the local storage
+     // Get any saved loot from localStorage
+			let savedLoot = JSON.parse(localStorage.getItem('me-treasure'));
+			let captain = new TreasureChest(savedLoot);
 
-// Try to break the library
-captain.gold = 123;
-captain.#gold = 456;
+			/**
+			 * Save treasure to localStorage
+			 * @param  {Event} event The event object
+			 */
+			function saveLoot (event) {
 
-// Try to access private methods
-captain.shuffle([1, 2, 3]);
-captain.#shuffle([4, 5, 6]);
+				// Create the treasure object
+				let treasure = {
+					gold: event.detail.getGold(),
+					silver: event.detail.getSilver(),
+					bronze: event.detail.getBronze()
+				};
+
+				// Save it to localStorage
+				localStorage.setItem('me-treasure', JSON.stringify(treasure));
+
+			}
+
+			// Listen for treasure events
+			document.addEventListener('treasure:gold', saveLoot);
+			document.addEventListener('treasure:silver', saveLoot);
+			document.addEventListener('treasure:bronze', saveLoot);
+
+			let loot = captain.addGold(8).addSilver(24).addBronze(37).getLoot();
+			console.log(loot);
 
    </script>
 </body>
