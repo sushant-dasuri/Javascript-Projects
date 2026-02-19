@@ -10,16 +10,21 @@ class RollDice extends HTMLElement {
         //Access the parent class properties and methods
         super();
 
-        // Define Properties 
+        //Creates a shadow root
+        this.root = this.attachShadow({mode: 'closed'});
+
+         // Define Properties 
         this.#dice = [1, 2, 3, 4, 5, 6];
+
 
         //Render HTML
         let btnText = this.innerHTML.trim();
-        this.innerHTML = 
+        this.root.innerHTML = 
         ` <p>
-            <button>${btnText ? btnText : 'Roll Dice'}</button>
+            <button><slot>Roll Dice</slot></button>
         </p>
-        <div aria-live="polite"></div>`
+        <div aria-live="polite"></div>`   
+
     }
 
 
@@ -66,7 +71,7 @@ class RollDice extends HTMLElement {
 
                 connectedCallback() {
                     // Attach a click event listener to the button
-                    let btn = this.querySelector('button');
+                    let btn = this.root.querySelector('button');
                     if(!btn) return;
                     btn.addEventListener('click', this.#clickHandler);
 
@@ -77,13 +82,13 @@ class RollDice extends HTMLElement {
                  * @param {Event} event The event object
                  */
 
-                #clickHandler() {
+                #clickHandler(event) {
 
                     // Get the host component
-                    let host = event.target.closest('roll-dice');
+                    let host = event.target.getRootNode().host;
 
                     //Get the message element
-                    let target = host.querySelector('[aria-live="polite"]')
+                    let target = host.root.querySelector('[aria-live="polite"]')
                     if(!target) return;
 
                     //Roll the dice
@@ -101,9 +106,9 @@ class RollDice extends HTMLElement {
 
                 disconnectedCallback() {
                     //Remove the click event listener from the button 
-                    let btn = this.querySelector('btn');
+                    let btn = this.root.querySelector('btn');
                     if(!btn) return;
-                    BroadcastChannel.removeEventListener('click', this.#clickHandler);
+                    btn.removeEventListener('click', this.#clickHandler);
                 }
 }
 
