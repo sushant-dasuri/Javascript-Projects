@@ -20,7 +20,26 @@ class RollDice extends HTMLElement {
         //Render HTML
         let btnText = this.innerHTML.trim();
         this.root.innerHTML = 
-        ` <p>
+        ` 
+        <style>
+            button {
+            background-color: var(--bg-color, #0088cc);
+			border: 1px solid var(--bg-color, #0088cc);
+			border-radius: var(--radius, 0.25em);
+			color: var(--color, #ffffff);
+			font-size: var(--size, 1.5em);
+			padding: 0.5em 1em;
+		}
+
+		[aria-live] {
+			font-size: var(--msg-size, 1.3125em);
+            font-weight: var(--msg-weight, normal);
+			font-style: var(--msg-style, normal);
+			color: var(--msg-color, inherit);
+		}
+        </style>
+        
+        <p>
             <button><slot>Roll Dice</slot></button>
         </p>
         <div aria-live="polite"></div>`   
