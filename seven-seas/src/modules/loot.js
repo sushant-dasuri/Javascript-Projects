@@ -1,4 +1,4 @@
-import TreasureChest from './treasure-chest.js';
+import TreasureChest from '.src/modules/treasure-chest.js';
 
 
 // Hold the treasure instance
