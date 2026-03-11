@@ -1,7 +1,11 @@
-export default {
-    input: './src/js/index.js',
-    output: {
-        file: './dist/scripts.js',
-        format: 'iife',
+let files = ['index.js', 'dice.js', 'treasure.js'];
+
+export default files.map(function (file) {
+    return {
+        input : `src/js/${file}`,
+        output : {
+            file : `dist/js/${file}`,
+            format : 'iife'
+        }
     }
-};
+})

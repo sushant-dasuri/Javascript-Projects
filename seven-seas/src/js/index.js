@@ -1,6 +1,4 @@
-import {createTreasure, showLoot, lootListeners} from '../modules/loot.js';
-import '../modules/roll-dice.js';
+import {createTreasure, showLoot} from '../components/loot.js';
 
 createTreasure();
 showLoot();
-lootListeners();
